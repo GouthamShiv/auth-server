@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import config from 'config';
+import { nanoid } from 'nanoid';
 import log from '../utils/logger';
-import { CreateUserInput, VerifyUserInput } from '../schema/user.schema';
-import { createUser, findUserById } from '../service/user.service';
+import { CreateUserInput, ForgotPasswordInput, VerifyUserInput } from '../schema/user.schema';
+import { createUser, findUserByEmail, findUserById } from '../service/user.service';
 import { sendEmail } from '../utils/mailer';
 
 export async function createUserHandler(req: Request<{}, {}, CreateUserInput>, res: Response) {
@@ -59,4 +60,40 @@ export async function verifyUserHandler(req: Request<VerifyUserInput>, res: Resp
 
   log.error(`Could not verify user with ID: ${id}`);
   return res.status(400).json(`Could not verify user with ID: ${id}`);
+}
+
+export async function forgotPasswordHandler(req: Request<{}, {}, ForgotPasswordInput>, res: Response) {
+  const { email } = req.body;
+  const message = `If a user with this email: ${email} is registered, you will receive a password reset email`;
+
+  log.info(`User with email: ${email} requested for password reset`);
+
+  const user = await findUserByEmail(email);
+
+  if (!user) {
+    log.warn(`No user with email: ${email}`);
+    return res.status(200).json(message);
+  }
+
+  if (!user.verified) {
+    log.warn(`User with email: ${email} trying to reset password before verification`);
+    return res.json(`User yet to be verified`);
+  }
+
+  const passwordResetCode = nanoid();
+  user.passwordResetCode = passwordResetCode;
+  await user.save();
+  log.info(`Password reset code successfully generated for email: ${email}`);
+
+  const from = config.get<string>('fromEmail');
+
+  await sendEmail({
+    from,
+    to: user.email,
+    subject: 'Reset your password',
+    text: `Password reset code: ${user.passwordResetCode}\nId: ${user.id}`,
+  });
+  log.info(`Password reset email sent to ${email}`);
+
+  return res.json(message);
 }
