@@ -13,14 +13,14 @@ server.use(helmet());
 server.use(express.json());
 server.use(router);
 
-// const PORT = config.get('port');
+const PORT = config.get('port');
 
 // server.listen(PORT, () => {
 //   log.info(`Server started at http://localhost:${PORT}`);
 //   connectToDB();
 // });
 
-if (!process.env.PORT) {
+if (process.env.RUNTIME === 'local') {
   const sslServer = https.createServer(
     {
       key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
@@ -28,12 +28,11 @@ if (!process.env.PORT) {
     },
     server,
   );
-  sslServer.listen(8082, () => {
-    log.info('🔐 Server successfully started https://localhost:8082');
+  sslServer.listen(PORT, () => {
+    log.info(`🔐 Server successfully started https://localhost:${PORT}`);
   });
   connectToDB();
 } else {
-  const { PORT } = process.env;
   server.listen(PORT, () => {
     log.info(`🔐 Server successfully started on port ${PORT}`);
   });
