@@ -4,7 +4,7 @@ A NodeJS based Auth Server
 
 ### Steps for run this app in 🔐`HTTPS` mode
 
-This is now required as part of this commit because I've added `helmet` 🪖 <br> A dependency which enforces additional security
+This is now required as part of [this commit](https://github.com/GouthamShiv/auth-server/commit/0b272c8d38214f0cf596cf078e016b61bcf3eae1) because I've added `helmet` 🪖 <br> A dependency which enforces additional security
 
 - > Create a directory named `cert` under `src` <br> navigate to this `cert` directory
 
@@ -18,6 +18,6 @@ This is now required as part of this commit because I've added `helmet` 🪖 <br
 
 So, for windows buddies hit [this link](https://stackoverflow.com/questions/50625283/how-to-install-openssl-in-windows-10), which takes you to a stack-overflow answer, which might help setting up openssl and probably get your certificates generated with the same commands as above _<small>(don't forget to create and navigate to the `cert` directory within `src`)<small>_
 
-### License
+## License
 
 [MIT](https://gouthamshiv.github.io/mit-license)
