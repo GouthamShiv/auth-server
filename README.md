@@ -16,7 +16,7 @@ This is now required as part of [this commit](https://github.com/GouthamShiv/aut
 
 **NOTE:** openssl comes pre-installed on MAC and easy to get it on any linux distros.
 
-So, for windows buddies hit [this link](https://stackoverflow.com/questions/50625283/how-to-install-openssl-in-windows-10), which takes you to a stack-overflow answer, which might help setting up openssl and probably get your certificates generated with the same commands as above _<small>(don't forget to create and navigate to the `cert` directory within `src`)<small>_
+So, for my buddies using windows, hit [this link](https://stackoverflow.com/questions/50625283/how-to-install-openssl-in-windows-10) which takes you to a stack-overflow answer, which might help setting up openssl and probably get your certificates generated with the same commands as above _<small>(don't forget to create and navigate to the `cert` directory within `src`)<small>_
 
 ## License
 

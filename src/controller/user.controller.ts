@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import config from 'config';
 import { nanoid } from 'nanoid';
 import log from '../utils/logger';
-import { CreateUserInput, ForgotPasswordInput, VerifyUserInput } from '../schema/user.schema';
+import { CreateUserInput, ForgotPasswordInput, ResetPasswordInput, VerifyUserInput } from '../schema/user.schema';
 import { createUser, findUserByEmail, findUserById } from '../service/user.service';
 import { sendEmail } from '../utils/mailer';
 
@@ -96,4 +96,27 @@ export async function forgotPasswordHandler(req: Request<{}, {}, ForgotPasswordI
   log.info(`Password reset email sent to ${email}`);
 
   return res.json(message);
+}
+
+export async function resetPasswordHandler(
+  req: Request<ResetPasswordInput['params'], {}, ResetPasswordInput['body']>,
+  res: Response,
+) {
+  const { id, passwordResetCode } = req.params;
+  const { password } = req.body;
+
+  const user = await findUserById(id);
+
+  if (!user || !user.passwordResetCode || user.passwordResetCode !== passwordResetCode) {
+    log.warn(`Password reset request failure for user with Id: ${id}`);
+    return res.status(400).json(`Could not reset user password`);
+  }
+
+  user.passwordResetCode = null;
+  user.password = password;
+
+  await user.save();
+
+  log.info(`Password reset successful for user with Id: ${id}`);
+  return res.json(`Successfully updated user password`);
 }
