@@ -7,8 +7,13 @@ export function signJWT(
   keyName: 'accessTokenPrivateKey' | 'refreshTokenPrivateKey',
   options?: jwt.SignOptions | undefined,
 ) {
-  const expiresIn = keyName === 'accessTokenPrivateKey' ? '15m' : '1d';
+  const expiresIn =
+    keyName === 'accessTokenPrivateKey'
+      ? config.get<string>('accessTokenExpiry')
+      : config.get<string>('refreshTokenExpiry');
+
   const signingKey = config.get<string>(keyName).replace(/\\n/g, '\n') as string;
+
   log.debug(`Access and Refresh tokens created for: ${JSON.stringify(object)}`);
   // deepcode ignore CopyPasteError: this is a format for spreading an object
   return jwt.sign(object, signingKey, { ...(options && options), algorithm: 'RS256', expiresIn });

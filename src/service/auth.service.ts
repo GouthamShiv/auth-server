@@ -1,10 +1,11 @@
 import { DocumentType } from '@typegoose/typegoose';
+import { omit } from 'lodash';
 import { signJWT } from '../utils/jwt';
-import { User } from '../model/user.model';
+import { privateFields, User } from '../model/user.model';
 import SessionModel from '../model/session.model';
 
 export function signAccessToken(user: DocumentType<User>) {
-  const payload = user.toJSON();
+  const payload = omit(user.toJSON(), privateFields);
   const accessToken = signJWT(payload, 'accessTokenPrivateKey');
   return accessToken;
 }

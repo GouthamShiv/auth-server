@@ -3,6 +3,8 @@ import argon2 from 'argon2';
 import { nanoid } from 'nanoid';
 import log from '../utils/logger';
 
+export const privateFields = ['__v', 'verified', 'password', 'passwordResetCode', 'verificationCode'];
+
 @pre<User>('save', async function () {
   if (this.isModified('password')) {
     const hash = await argon2.hash(this.password);

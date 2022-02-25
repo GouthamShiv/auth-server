@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { omit } from 'lodash';
 import log from '../utils/logger';
 import { verifyJWT } from '../utils/jwt';
 
@@ -15,7 +14,7 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
 
   if (decode) {
     log.debug(`Access token decoded, user Id: ${JSON.stringify(decode)}`);
-    res.locals.user = omit(decode, ['password', 'verificationCode', 'passwordResetCode']);
+    res.locals.user = decode;
   }
   return next();
 };
