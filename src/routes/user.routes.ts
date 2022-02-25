@@ -4,6 +4,7 @@ import { createUserSchema, forgotPasswordSchema, resetPasswordSchema, verifyUser
 import {
   createUserHandler,
   forgotPasswordHandler,
+  getCurrentUserHandler,
   resetPasswordHandler,
   verifyUserHandler,
 } from '../controller/user.controller';
@@ -17,5 +18,7 @@ router.get('/api/users/verify/:id/:verificationCode', validate(verifyUserSchema)
 router.post('/api/users/forgotpassword', validate(forgotPasswordSchema), forgotPasswordHandler);
 
 router.post('/api/users/resetpassword/:id/:passwordResetCode', validate(resetPasswordSchema), resetPasswordHandler);
+
+router.get('/api/users/me', getCurrentUserHandler);
 
 export default router;

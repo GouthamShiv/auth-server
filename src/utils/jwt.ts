@@ -15,13 +15,12 @@ export function signJWT(
 }
 
 export function verifyJWT<T>(token: string, keyName: 'accessTokenPublicKey' | 'refreshTokenPublicKey'): T | null {
-  const publicKey = Buffer.from(config.get<string>(keyName), 'base64').toString('ascii');
-
+  const publicKey = config.get<string>(keyName).replace(/\\n/g, '\n') as string;
   try {
-    const decoded = jwt.verify(token, publicKey) as T;
+    const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] }) as T;
     return decoded;
   } catch (e) {
-    log.warn(`Token verification failed`);
+    log.warn(`Token verification failed: ${e}`);
     return null;
   }
 }

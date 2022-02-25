@@ -120,3 +120,7 @@ export async function resetPasswordHandler(
   log.info(`Password reset successful for user with Id: ${id}`);
   return res.json(`Successfully updated user password`);
 }
+
+export async function getCurrentUserHandler(req: Request, res: Response) {
+  return res.json(res.locals.user);
+}

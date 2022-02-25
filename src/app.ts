@@ -7,18 +7,15 @@ import helmet from 'helmet';
 import log from './utils/logger';
 import router from './routes/index';
 import connectToDB from './utils/db.connect';
+import deserializeUser from './middleware/deserializeUser';
 
 const server = express().disable('x-powered-by');
 server.use(helmet());
 server.use(express.json());
+server.use(deserializeUser);
 server.use(router);
 
 const PORT = config.get('port');
-
-// server.listen(PORT, () => {
-//   log.info(`Server started at http://localhost:${PORT}`);
-//   connectToDB();
-// });
 
 if (process.env.RUNTIME === 'local') {
   const sslServer = https.createServer(
