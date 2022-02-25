@@ -9,6 +9,10 @@ const smtp = {
   secure: false,
 };
 const fromEmail = `${process.env.SMTP_FROM}`;
+const accessTokenPrivateKey = `${process.env.ACC_TKN_PRI}`;
+const accessTokenPublicKey = `${process.env.ACC_TKN_PUB}`;
+const refreshTokenPrivateKey = `${process.env.REF_TKN_PRI}`;
+const refreshTokenPublicKey = `${process.env.REF_TKN_PUB}`;
 
 export default {
   port,
@@ -16,4 +20,8 @@ export default {
   logLevel,
   smtp,
   fromEmail,
+  accessTokenPrivateKey,
+  accessTokenPublicKey,
+  refreshTokenPrivateKey,
+  refreshTokenPublicKey,
 };
