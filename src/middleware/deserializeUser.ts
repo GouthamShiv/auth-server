@@ -6,14 +6,14 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
   const accessToken = (req.headers.authorization || '').replace(/^Bearer\s/, '');
 
   if (!accessToken) {
-    log.debug(`No access token present in header for user with Id: ${JSON.stringify(req.body.id || req.params.id)}`);
+    log.debug(`No access token present in header`);
     return next();
   }
 
   const decode = verifyJWT(accessToken, 'accessTokenPublicKey') as any;
 
   if (decode) {
-    log.debug(`Access token decoded, user Id: ${JSON.stringify(decode)}`);
+    log.debug(`Access token decoded, user: ${JSON.stringify(decode)}`);
     res.locals.user = decode;
   }
   return next();

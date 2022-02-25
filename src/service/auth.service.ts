@@ -22,3 +22,7 @@ export async function signRefreshToken({ userId }: { userId: string }) {
   const refreshToken = signJWT({ session: session.id }, 'refreshTokenPrivateKey');
   return refreshToken;
 }
+
+export async function findSessionById(id: string) {
+  return SessionModel.findById(id);
+}
